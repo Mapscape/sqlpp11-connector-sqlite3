@@ -1,16 +1,16 @@
 # Copyright (c) 2013, Roland Bock
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without modification,
 # are permitted provided that the following conditions are met:
-# 
+#
 #   Redistributions of source code must retain the above copyright notice, this
 #   list of conditions and the following disclaimer.
-# 
+#
 #   Redistributions in binary form must reproduce the above copyright notice, this
 #   list of conditions and the following disclaimer in the documentation and/or
 #   other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -48,8 +48,22 @@ include_directories("${SQLPP11_INCLUDE_DIR}")
 set(include_dir "${PROJECT_SOURCE_DIR}/include")
 file(GLOB_RECURSE sqlpp_headers ${include_dir}/*.h ${SQLPP11_INCLUDE_DIR}/*.h)
 include_directories(${include_dir})
+
+
+
+# Mapscape-specific alterations
+
+# building tests requires some external dependencies that are not available within MSGeneralpp build
+SET( SQLITE_RELEASE_DIR ${SQLITE_RELEASE_ROOT}/${CV_HOSTTYPE})
+MESSAGE( SEND_MESSAGE "SQLITE release dir = ${SQLITE_RELEASE_DIR}")
+
+INCLUDE_DIRECTORIES( "${SQLITE_RELEASE_DIR}/include")
+LINK_DIRECTORIES(    "${SQLITE_RELEASE_DIR}/lib")
+
+#add_subdirectory(tests)
+# end Mapscape-specific alterations.
+
 add_subdirectory(src)
-add_subdirectory(tests)
 
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/sqlpp11" DESTINATION include)
 
