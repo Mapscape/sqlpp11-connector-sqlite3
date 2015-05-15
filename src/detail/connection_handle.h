@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2013, Roland Bock
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *   Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * 
+ *
  *   Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -42,8 +42,10 @@ namespace sqlpp
 			{
 				connection_config config;
 				::sqlite3* sqlite;
+				bool close_on_destruct = true;
 
 				connection_handle(connection_config config);
+				connection_handle( ::sqlite3 *sqlite, bool close_on_destruct);
 				~connection_handle();
 				connection_handle(const connection_handle&) = delete;
 				connection_handle(connection_handle&&) = delete;

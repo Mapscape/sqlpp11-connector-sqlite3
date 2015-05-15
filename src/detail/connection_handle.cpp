@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2013, Roland Bock
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *   Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * 
+ *
  *   Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -41,9 +41,9 @@ namespace sqlpp
 				sqlite(nullptr)
 			{
 				auto rc = sqlite3_open_v2(
-						conf.path_to_database.c_str(), 
-						&sqlite, 
-						conf.flags, 
+						conf.path_to_database.c_str(),
+						&sqlite,
+						conf.flags,
 						conf.vfs.empty() ? nullptr : conf.vfs.c_str());
 				if (rc != SQLITE_OK)
 				{
@@ -53,16 +53,25 @@ namespace sqlpp
 				}
 			}
 
+			connection_handle::connection_handle( ::sqlite3 *sqlite_native, bool close)
+			:sqlite( sqlite_native),
+			 close_on_destruct( close)
+			{
+
+			}
+
 			connection_handle::~connection_handle()
 			{
-				auto rc = sqlite3_close(sqlite);
-				if (rc != SQLITE_OK)
+				if (close_on_destruct)
 				{
-					std::cerr << "Sqlite3 error: Can't close database: " << sqlite3_errmsg(sqlite) << std::endl;
+					auto rc = sqlite3_close(sqlite);
+					if (rc != SQLITE_OK)
+					{
+						std::cerr << "Sqlite3 error: Can't close database: " << sqlite3_errmsg(sqlite) << std::endl;
+					}
 				}
 			}
 		}
 	}
 }
-
 

@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2013, Roland Bock
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *   Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * 
+ *
  *   Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -128,6 +128,7 @@ namespace sqlpp
 				}
 
 			connection(connection_config config);
+			connection( ::sqlite3 *sqlite, bool close_on_destruct);
 			~connection();
 			connection(const connection&) = delete;
 			connection(connection&&) = delete;
@@ -237,7 +238,7 @@ namespace sqlpp
 			//! execute arbitrary command (e.g. create a table)
 			size_t execute(const std::string& command);
 
-			template<typename Execute, 
+			template<typename Execute,
 				          typename Enable = typename std::enable_if<not std::is_convertible<Execute, std::string>::value, void>::type>
 			size_t execute(const Execute& x)
 			{
